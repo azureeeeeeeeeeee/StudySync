@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/screens/singin_screen.dart';
 import 'package:mobile/screens/welcome_screen.dart';
 
 void main() {
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const WelcomeScreen(),
+      home: const LoginPage(),
     );
   }
 }
