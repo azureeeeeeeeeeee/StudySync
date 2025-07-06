@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile/screens/home_screen.dart';
 import 'package:mobile/screens/signup_screen.dart';
 import 'package:mobile/constants.dart';
+import 'package:mobile/data/notifiers.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -44,6 +46,11 @@ class _LoginPageState extends State<LoginPage> {
       });
       final responseData = jsonDecode(response.body);
       print('Login successful: $responseData');
+      usernameNotifier.value = _usernameController.text;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
     } else {
       setState(() {
         isLoading = false;

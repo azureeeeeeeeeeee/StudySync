@@ -21,7 +21,6 @@ class _SignupPageState extends State<SignupPage> {
   String? errorMessage;
 
   Future<void> _signup() async {
-    print('pressing button');
     Map<String, dynamic> data = {
       'username': _emailController.text,
       'password': _passwordController.text,
@@ -50,9 +49,6 @@ class _SignupPageState extends State<SignupPage> {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
-
-    print(response.statusCode);
-    print(response.body);
 
     if (response.statusCode == 200) {
       setState(() {
