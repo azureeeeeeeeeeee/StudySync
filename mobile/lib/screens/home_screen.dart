@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/data/class.dart';
 import 'package:mobile/data/notifiers.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,6 +10,77 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  List<Room> rooms = [
+    Room(
+      id: 1,
+      title: 'Folder Belajar 1',
+      description: 'Deskripsi Folder belajar 1',
+    ),
+    Room(
+      id: 2,
+      title: 'Folder Belajar 2',
+      description: 'Deskripsi Folder belajar 2',
+    ),
+    Room(
+      id: 3,
+      title: 'Folder Belajar 3',
+      description: 'Deskripsi Folder belajar 3',
+    ),
+    Room(
+      id: 4,
+      title: 'Folder Belajar 4',
+      description: 'Deskripsi Folder belajar 4',
+    ),
+  ];
+
+  void _showAddRoomDialog() {
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Tambah Kelompok Belajar'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: titleController,
+                decoration: InputDecoration(labelText: 'Judul'),
+              ),
+              TextField(
+                controller: descriptionController,
+                decoration: InputDecoration(labelText: 'Deskripsi'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Batal'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  rooms.add(
+                    Room(
+                      id: rooms.length + 1,
+                      title: titleController.text,
+                      description: descriptionController.text,
+                    ),
+                  );
+                });
+                Navigator.pop(context);
+              },
+              child: Text('Tambah'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,46 +88,38 @@ class HomePageState extends State<HomePage> {
         title: Text('Selamat datang, @${usernameNotifier.value}'),
         automaticallyImplyLeading: false,
       ),
-      body: Stack(
-        children: [
-          Stack(
-            children: [
-              Text('Berikut ini adalah 3 kelompok belajar terbaru'),
-              ListView(
-                padding: const EdgeInsets.all(8.0),
-                children: [
-                  Card(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Berikut ini adalah kelompok belajar yang tersedia',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: ListView.builder(
+                itemCount: rooms.length,
+                itemBuilder: (context, index) {
+                  final room = rooms[index];
+                  return Card(
                     child: ListTile(
-                      title: Text('Kelompok Belajar 1'),
-                      subtitle: Text('Deskripsi kelompok belajar 1'),
-                      onTap: () {
-                        // Aksi ketika kelompok belajar ditekan
-                      },
+                      title: Text(room.title),
+                      subtitle: Text(room.description),
+                      onTap: () {},
                     ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      title: Text('Kelompok Belajar 2'),
-                      subtitle: Text('Deskripsi kelompok belajar 2'),
-                      onTap: () {
-                        // Aksi ketika kelompok belajar ditekan
-                      },
-                    ),
-                  ),
-                  Card(
-                    child: ListTile(
-                      title: Text('Kelompok Belajar 3'),
-                      subtitle: Text('Deskripsi kelompok belajar 3'),
-                      onTap: () {
-                        // Aksi ketika kelompok belajar ditekan
-                      },
-                    ),
-                  ),
-                ],
+                  );
+                },
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddRoomDialog,
+        tooltip: 'Tambah Kelompok Belajar',
+        child: Icon(Icons.add),
       ),
     );
   }
