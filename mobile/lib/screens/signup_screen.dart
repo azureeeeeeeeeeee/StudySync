@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/constants.dart';
 import 'package:mobile/screens/singin_screen.dart';
+import 'package:mobile/services/auth.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -27,41 +28,28 @@ class _SignupPageState extends State<SignupPage> {
       'confirm_password': _confirmPasswordController.text,
     };
 
-    if (_emailController.text.isEmpty ||
-        _passwordController.text.isEmpty ||
-        _confirmPasswordController.text.isEmpty) {
-      setState(() {
-        errorMessage = 'Please fill in all fields';
-      });
-      return;
-    }
+    setState(() {
+      isLoading = true;
+    });
 
     if (_passwordController.text != _confirmPasswordController.text) {
       setState(() {
         errorMessage = 'Passwords do not match';
+        isLoading = false;
       });
       return;
     }
 
-    final uri = Uri.parse('$BASE_URL/auth/register');
-    final response = await http.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
-
-    if (response.statusCode == 200) {
+    try {
+      await register(_emailController.text, _passwordController.text);
       setState(() {
         isLoading = false;
-        errorMessage = null;
       });
-      final responseData = jsonDecode(response.body);
-      print('Signup successful: $responseData');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
       );
-    } else {
+    } catch (e) {
       setState(() {
         isLoading = false;
         errorMessage = 'Signup failed. Please try again.';

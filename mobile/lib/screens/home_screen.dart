@@ -31,6 +31,11 @@ class HomePageState extends State<HomePage> {
       title: 'Folder Belajar 4',
       description: 'Deskripsi Folder belajar 4',
     ),
+    Room(
+      id: 5,
+      title: 'Folder Belajar 5',
+      description: 'Deskripsi Folder belajar 5',
+    ),
   ];
 
   void _showAddRoomDialog() {

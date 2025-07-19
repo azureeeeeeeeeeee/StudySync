@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:mobile/screens/home_screen.dart';
 import 'package:mobile/screens/signup_screen.dart';
-import 'package:mobile/constants.dart';
 import 'package:mobile/data/notifiers.dart';
+import 'package:mobile/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,38 +18,32 @@ class _LoginPageState extends State<LoginPage> {
   String? errorMessage;
 
   Future<void> _login() async {
-    Map<String, dynamic> data = {
-      'username': _usernameController.text,
-      'password': _passwordController.text,
-    };
-
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
       setState(() {
         errorMessage = 'Please enter both username and password';
       });
       return;
     }
+    setState(() {
+      isLoading = true;
+    });
 
-    final uri = Uri.parse('$BASE_URL/auth/login');
-    final response = await http.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
-
-    if (response.statusCode == 200) {
+    try {
+      final data = await login(
+        _usernameController.text,
+        _passwordController.text,
+      );
       setState(() {
         isLoading = false;
         errorMessage = null;
       });
-      final responseData = jsonDecode(response.body);
-      print('Login successful: $responseData');
+      print('Login successful: $data');
       usernameNotifier.value = _usernameController.text;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
-    } else {
+    } catch (e) {
       setState(() {
         isLoading = false;
         errorMessage = 'Login failed. Please check your credentials.';
