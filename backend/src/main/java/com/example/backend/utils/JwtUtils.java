@@ -1,4 +1,4 @@
-package com.test.backend.utils;
+package com.example.backend.utils;
 
 
 import com.example.backend.users.CustomUser;
