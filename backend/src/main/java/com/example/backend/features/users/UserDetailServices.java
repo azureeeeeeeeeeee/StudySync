@@ -1,4 +1,4 @@
-package com.example.backend.users;
+package com.example.backend.features.users;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

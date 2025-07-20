@@ -1,4 +1,4 @@
-package com.example.backend.users;
+package com.example.backend.features.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;

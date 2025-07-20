@@ -1,4 +1,4 @@
-package com.example.backend.users;
+package com.example.backend.features.users;
 
 import com.example.backend.DTO.JsonResponse;
 import org.springframework.http.HttpStatus;
