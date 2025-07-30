@@ -3,9 +3,11 @@ package com.example.backend.utils;
 import com.example.backend.features.users.CustomUser;
 import com.example.backend.features.users.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class UserUtils {
     private final UserRepository userRepository;
 
