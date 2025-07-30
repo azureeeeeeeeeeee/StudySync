@@ -1,1 +1,1 @@
-const String BASE_URL = "https://5d1253bd6b67.ngrok-free.app";
+const String BASE_URL = "http://192.168.1.6:8080";

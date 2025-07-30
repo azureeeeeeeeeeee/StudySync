@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/data/class.dart';
 import 'package:mobile/data/notifiers.dart';
+import 'package:mobile/services/forums.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,9 +39,24 @@ class HomePageState extends State<HomePage> {
     ),
   ];
 
+
   void _showAddRoomDialog() {
     final titleController = TextEditingController();
     final descriptionController = TextEditingController();
+    Future<void> _addForum() async {
+      Map<String, String> data = {
+        'title': titleController.text,
+        'description': descriptionController.text
+      };
+
+      try {
+        await addForum(data['title'], data['description']);
+        Navigator.pop(context);
+      } catch (e) {
+        print('==== ERROR ====');
+        print('Error : $e');
+      }
+    }
 
     showDialog(
       context: context,
@@ -66,18 +82,7 @@ class HomePageState extends State<HomePage> {
               child: Text('Batal'),
             ),
             ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  rooms.add(
-                    Room(
-                      id: rooms.length + 1,
-                      title: titleController.text,
-                      description: descriptionController.text,
-                    ),
-                  );
-                });
-                Navigator.pop(context);
-              },
+              onPressed: _addForum,
               child: Text('Tambah'),
             ),
           ],
