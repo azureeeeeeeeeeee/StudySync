@@ -3,6 +3,7 @@ package com.example.backend.configs;
 import com.example.backend.filters.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/auth/**").permitAll();
-//                    authorize.requestMatchers(HttpMethod.GET, "/books/**", "/books").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/api/forum/**", "/api/forum").permitAll();
 //                    authorize.requestMatchers(HttpMethod.GET, "/review/**", "/review").permitAll();
 //                    authorize.requestMatchers(HttpMethod.GET, "/comment/**", "/comment").permitAll();
                     authorize.anyRequest().authenticated();

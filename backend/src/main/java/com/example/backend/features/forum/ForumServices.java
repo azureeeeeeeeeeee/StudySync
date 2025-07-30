@@ -3,6 +3,9 @@ package com.example.backend.features.forum;
 import com.example.backend.DTO.JsonResponse;
 import com.example.backend.features.users.CustomUser;
 import com.example.backend.utils.UserUtils;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,18 @@ public class ForumServices {
             response.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
-
     }
+
+    public ResponseEntity<JsonResponse<Object>> findAll() {
+        JsonResponse<Object> response = new JsonResponse<>();
+
+        List<Forum> forums = forumRepository.findAll();
+        List<ForumDTO> forumDTOs = forums.stream().map(ForumDTO::new).toList();
+
+        response.setMessage("All forums fetched");
+        response.setData(forumDTOs);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

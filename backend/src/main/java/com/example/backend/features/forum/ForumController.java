@@ -1,6 +1,7 @@
 package com.example.backend.features.forum;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,5 +19,10 @@ public class ForumController {
     @PostMapping("/api/forum")
     public ResponseEntity<JsonResponse<Void>> createForum(@RequestBody Forum forum) {
         return forumServices.create(forum);
+    }
+
+    @GetMapping("/api/forum")
+    public ResponseEntity<JsonResponse<Object>> findAllForum() {
+        return forumServices.findAll();
     }
 }
