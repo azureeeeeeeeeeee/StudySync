@@ -3,6 +3,7 @@ import 'package:mobile/screens/home_screen.dart';
 import 'package:mobile/screens/signup_screen.dart';
 import 'package:mobile/data/notifiers.dart';
 import 'package:mobile/services/auth.dart';
+import 'package:mobile/widgets/auth/input.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -73,22 +74,9 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                TextField(
-                  controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                authInput(controller: _usernameController, isPassword: false, labelText: 'Username'),
                 const SizedBox(height: 10),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                authInput(controller: _passwordController, isPassword: true, labelText: 'Password'),
                 const SizedBox(height: 20),
                 isLoading
                     ? CircularProgressIndicator()

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/constants.dart';
 import 'package:mobile/screens/singin_screen.dart';
 import 'package:mobile/services/auth.dart';
+import 'package:mobile/widgets/auth/input.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -84,31 +85,11 @@ class _SignupPageState extends State<SignupPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                authInput(controller: _emailController, isPassword: false, labelText: "Username"),
                 SizedBox(height: 10),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                authInput(controller: _passwordController, isPassword: true, labelText: "Password"),
                 SizedBox(height: 10),
-                TextField(
-                  controller: _confirmPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                authInput(controller: _confirmPasswordController, isPassword: true, labelText: "Confirm Password"),
                 SizedBox(height: 20),
 
                 isLoading
@@ -120,7 +101,6 @@ class _SignupPageState extends State<SignupPage> {
                 SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
-                    // Navigate to sign up page
                     Navigator.push(
                       context,
                       MaterialPageRoute(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/data/class.dart';
+import 'package:mobile/data/class/forum_data.dart';
 import 'package:mobile/data/notifiers.dart';
-import 'package:mobile/services/forums.dart';
+import 'package:mobile/widgets/home/room_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,34 +10,30 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => HomePageState();
 }
 
+
+
 class HomePageState extends State<HomePage> {
-  List<Room> rooms = [
-    Room(
-      id: 1,
-      title: 'Folder Belajar 1',
-      description: 'Deskripsi Folder belajar 1',
-    ),
-    Room(
-      id: 2,
-      title: 'Folder Belajar 2',
-      description: 'Deskripsi Folder belajar 2',
-    ),
-    Room(
-      id: 3,
-      title: 'Folder Belajar 3',
-      description: 'Deskripsi Folder belajar 3',
-    ),
-    Room(
-      id: 4,
-      title: 'Folder Belajar 4',
-      description: 'Deskripsi Folder belajar 4',
-    ),
-    Room(
-      id: 5,
-      title: 'Folder Belajar 5',
-      description: 'Deskripsi Folder belajar 5',
-    ),
-  ];
+  List<Forum> forums = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    fetchForums();
+  }
+
+  Future<void> fetchForums() async {
+    try {
+      final allForums = await Forum.getAllforum();
+      print("==== Forums ====");
+      print(forums);
+      setState(() {
+        forums = allForums;
+      });
+    } catch (e) {
+      print('Error fetching forums: $e');
+    }
+  }
 
 
   void _showAddRoomDialog() {
@@ -50,7 +46,8 @@ class HomePageState extends State<HomePage> {
       };
 
       try {
-        await addForum(data['title'], data['description']);
+        await Forum.addForum(data);
+        await fetchForums();
         Navigator.pop(context);
       } catch (e) {
         print('==== ERROR ====');
@@ -110,16 +107,10 @@ class HomePageState extends State<HomePage> {
             const SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
-                itemCount: rooms.length,
+                itemCount: forums.length,
                 itemBuilder: (context, index) {
-                  final room = rooms[index];
-                  return Card(
-                    child: ListTile(
-                      title: Text(room.title),
-                      subtitle: Text(room.description),
-                      onTap: () {},
-                    ),
-                  );
+                  final forum = forums[index];
+                  return forumCard(forum: forum);
                 },
               ),
             ),
