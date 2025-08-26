@@ -48,4 +48,21 @@ public class ForumServices {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+
+    public ResponseEntity<JsonResponse<Object>> findById(Integer id) {
+        JsonResponse<Object> response = new JsonResponse<>();
+
+        try {
+            Forum forum = forumRepository.findById(id).get();
+            ForumDTO forumDTO = new ForumDTO(forum);
+            response.setMessage("Forum fetched");
+            response.setData(forumDTO);
+        } catch (Exception e) {
+            response.setMessage("Error : " + e.getMessage());
+            response.setData(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }
