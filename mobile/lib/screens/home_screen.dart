@@ -106,12 +106,14 @@ class HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 8),
             Expanded(
-              child: ListView.builder(
+              child: ListView.separated(
                 itemCount: forums.length,
                 itemBuilder: (context, index) {
                   final forum = forums[index];
-                  return forumCard(forum: forum);
-                },
+                  return forumCard(forum: forum, context: context);
+                },                
+                separatorBuilder: (context, index) => SizedBox(height: 15,),
+                scrollDirection: Axis.vertical,
               ),
             ),
           ],

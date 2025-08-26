@@ -1,1 +1,3 @@
-const String BASE_URL = "http://10.160.6.234:8080";
+const String IP = "192.168.1.39";
+
+const String BASE_URL = "http://$IP:8080";

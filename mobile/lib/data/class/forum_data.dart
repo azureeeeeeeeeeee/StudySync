@@ -74,14 +74,14 @@ class Forum {
     );
 
     if (response.statusCode != 200) {
-    String errorMessage = 'Terjadi kesalahan';
+      String errorMessage = 'Terjadi kesalahan';
 
-    try {
-      final resError = jsonDecode(response.body);
-      errorMessage = resError['message'] ?? errorMessage;
-    } catch (e) {
-      errorMessage = 'Error : ${response.reasonPhrase}';
-    }
+      try {
+        final resError = jsonDecode(response.body);
+        errorMessage = resError['message'] ?? errorMessage;
+      } catch (e) {
+        errorMessage = 'Error : ${response.reasonPhrase}';
+      }
 
       throw Exception(errorMessage);
     }
@@ -91,6 +91,37 @@ class Forum {
     final List<dynamic> forumsJson = resData['data'] ?? [];
 
     return forumsJson.map((json) => Forum.fromJson(json)).toList();
+  }
+
+
+
+  // Get one forum
+  static Future<Forum> getForumById(int id) async {
+    final uri = Uri.parse("$BASE_URL/api/forum/$id");
+
+    final response = await http.get(
+      uri,
+      headers: {'Content-Type': 'application/json'}
+    );
+
+    if (response.statusCode != 200) {
+      String errorMessage = 'Terjadi kesalahan';
+
+      try {
+        final resError = jsonDecode(response.body);
+        errorMessage = resError['message'] ?? errorMessage;
+      } catch (e) {
+        errorMessage = 'Error : ${response.reasonPhrase}';
+      }
+
+      throw Exception(errorMessage);
+    }
+
+    final resData = jsonDecode(response.body);
+
+    final dynamic forumJson = resData['data'] ?? {};
+
+    return Forum.fromJson(forumJson);
   }
 
 
