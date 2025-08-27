@@ -11,7 +11,6 @@ class ForumDetail extends StatefulWidget {
 
 class _ForumDetailState extends State<ForumDetail> {
   Forum? forum;
-
   @override
   void initState() {
     super.initState();
@@ -31,6 +30,31 @@ class _ForumDetailState extends State<ForumDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Fetched ${widget.forumId}"),
+      ),
+
+      body: forum == null ? 
+      const Center(child: CircularProgressIndicator()) : 
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Text(
+                forum!.title,
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+            ),
+            SizedBox(height: 25),
+            Text(
+              forum!.description),
+            SizedBox(height: 10),
+            Text("by @${forum!.owner}")
+          ],
+        ),
       ),
     );
   }
