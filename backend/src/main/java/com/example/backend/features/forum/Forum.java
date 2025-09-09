@@ -1,5 +1,8 @@
 package com.example.backend.features.forum;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.backend.features.users.CustomUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +26,9 @@ public class Forum {
     @JoinColumn(name = "added_by")
     public CustomUser addedBy;
 
+    @OneToMany(mappedBy = "forum", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ForumFile> files = new ArrayList<>();
+
     public Forum(Integer id, String title, CustomUser addedBy, String description) {
         this.id = id;
         this.title = title;
@@ -44,7 +50,7 @@ public class Forum {
     public CustomUser getAddedBy() {
         return addedBy;
     }
-
+ 
     public void setAddedBy(CustomUser addedBy) {
         this.addedBy = addedBy;
     }
@@ -63,5 +69,19 @@ public class Forum {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<ForumFile> getFiles() {
+        return this.files;
+    }
+
+    public void addFile(ForumFile file) {
+        files.add(file);
+        file.setForum(this);
+    }
+
+    public void removeFile(ForumFile file) {
+        files.remove(file);
+        file.setForum(null);
     }
 }
