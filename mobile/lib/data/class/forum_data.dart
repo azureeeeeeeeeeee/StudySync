@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:mobile/constants.dart';
+import 'package:mobile/data/class/forum_file_data.dart';
 import 'package:mobile/services/auth.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,15 +13,15 @@ class Forum {
   final String title;
   final String description;
   final String owner;
+  final List<ForumFile> files;
 
   Forum({
     required this.id,
     required this.title,
     required this.description,
-    required this.owner
+    required this.owner,
+    required this.files
   });
-
-
 
   // Json to object
   factory Forum.fromJson(Map<String, dynamic> json) {
@@ -27,7 +29,10 @@ class Forum {
       id: json['id'],
       title: json['title'],
       description: json['description'],
-      owner: json['owner']
+      owner: json['owner'],
+      files: (json['files'] as List<dynamic>)
+          .map((f) => ForumFile.fromJson(f))
+          .toList(),
     );
   }
 
@@ -124,5 +129,46 @@ class Forum {
     return Forum.fromJson(forumJson);
   }
 
+  // Add Resource
+  static Future<Forum> addResource(String title, File file, int idForum) async {
+    final uri = Uri.parse("$BASE_URL/api/forum/$idForum/files");
+    final token = await getToken();
 
+    final request = http.MultipartRequest('POST', uri);
+
+
+    // Add file t o parasm
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'file', file.path
+      )
+    );
+
+    request.fields['title'] = title;
+
+    request.headers.addAll({
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode != 200) {
+      String errorMessage = 'Terjadi kesalahan';
+
+      try {
+        final resError = jsonDecode(response.body);
+        errorMessage = resError['message'] ?? errorMessage;
+      } catch (e) {
+        errorMessage = 'Error: ${response.reasonPhrase}';
+      }
+
+      throw Exception(errorMessage);
+    }
+
+    final resData = jsonDecode(response.body);
+
+    return resData['message'] ?? "File berhasil ditambahkan";
+  }
 }
