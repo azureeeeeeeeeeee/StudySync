@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/data/class/forum_data.dart';
+import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/data/notifiers.dart';
 import 'package:mobile/widgets/home/room_widget.dart';
 

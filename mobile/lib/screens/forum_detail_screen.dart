@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/data/class/forum_data.dart';
+import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/widgets/forum_detail/pdf_card.dart';
 
 class ForumDetail extends StatefulWidget {

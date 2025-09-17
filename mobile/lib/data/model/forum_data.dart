@@ -3,7 +3,7 @@ import 'dart:io';
 
 // import 'package:flutter/foundation.dart';
 import 'package:mobile/constants.dart';
-import 'package:mobile/data/class/forum_file_data.dart';
+import 'package:mobile/data/model/forum_file_data.dart';
 import 'package:mobile/services/auth.dart';
 import 'package:http/http.dart' as http;
 

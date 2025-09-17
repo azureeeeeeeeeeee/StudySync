@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/data/class/forum_file_data.dart';
+import 'package:mobile/data/model/forum_file_data.dart';
 import 'package:mobile/screens/pdf_viewer_screen.dart';
 
 InkWell pdfCard({

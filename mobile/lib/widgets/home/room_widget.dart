@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/data/class/forum_data.dart';
+import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/screens/forum_detail_screen.dart';
 
 InkWell forumCard({
