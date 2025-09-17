@@ -15,6 +15,7 @@ class ForumDetail extends StatefulWidget {
 
 class _ForumDetailState extends State<ForumDetail> {
   Forum? forum;
+  File? selectedFile;
   @override
   void initState() {
     super.initState();
@@ -30,67 +31,91 @@ class _ForumDetailState extends State<ForumDetail> {
 
 
   void _showAddFileDialog() {
-    final titleController = TextEditingController();
-    File? selectedFile;
+  final titleController = TextEditingController();
 
-    Future<void> _pickFile() async {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf']
-      );
+  showDialog(
+    context: context,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setStateDialog) {
+          Future<void> _pickFile() async {
+            FilePickerResult? result = await FilePicker.platform.pickFiles(
+              type: FileType.custom,
+              allowedExtensions: ['pdf'],
+            );
 
-      if (result != null) {
-        setState(() {
-          selectedFile = File(result.files.single.path!);
-        });
-      }
-    }
-    
-    Future<void> _addFile() async {      
-      try {
-        await Forum.addResource(
-          titleController.text,
-          selectedFile!,
-          widget.forumId
-        );
-        Navigator.pop(context);
-      } catch (e) {
-        print('==== ERROR ====');
-        print('Error : $e');
-      }
-    }
+            if (result != null) {
+              setStateDialog(() { // Use the setStateDialog function
+                selectedFile = File(result.files.single.path!);
+              });
+            }
+          }
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Tambah Kelompok Belajar'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: InputDecoration(labelText: 'Judul'),
+          Future<void> _addFile() async {
+            try {
+              await Forum.addResource(
+                titleController.text,
+                selectedFile!,
+                widget.forumId,
+              );
+              Navigator.pop(context);
+              final updatedForum = await Forum.getForumById(widget.forumId);
+              setState(() {
+                forum = updatedForum;
+                selectedFile = null;
+              });
+              forum = await Forum.getForumById(widget.forumId);
+            } catch (e) {
+              print('==== ERROR ====');
+              print('Error : $e');
+            }
+          }
+
+          return AlertDialog(
+            title: Text('Tambah Kelompok Belajar'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                  TextField(
+                    controller: titleController,
+                    decoration: InputDecoration(labelText: 'Judul'),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    onPressed: _pickFile,
+                    icon: const Icon(Icons.attach_file),
+                    label: const Text("Pilih PDF"),
+                  ),
+                  SizedBox(height: 20),
+                  if (selectedFile != null)
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        selectedFile!.path.split(Platform.pathSeparator).last,
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    )
+                  else
+                    const Text(
+                      "Belum ada file dipilih",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                ],
               ),
-
-              ElevatedButton.icon(
-                onPressed: _pickFile,
-                icon: const Icon(Icons.attach_file),
-                label: const Text("Pilih PDF"),
-              ),
-            ],
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Batal'),
-            ),
-            ElevatedButton(
-              onPressed: _addFile,
-              child: Text('Tambah'),
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('Batal'),
+                ),
+                ElevatedButton(
+                  onPressed: _addFile,
+                  child: Text('Tambah'),
+                ),
+              ],
+            );
+          },
         );
       },
     );

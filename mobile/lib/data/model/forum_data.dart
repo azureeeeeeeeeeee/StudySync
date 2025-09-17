@@ -130,14 +130,14 @@ class Forum {
   }
 
   // Add Resource
-  static Future<Forum> addResource(String title, File file, int idForum) async {
-    final uri = Uri.parse("$BASE_URL/api/forum/$idForum/files");
+  static Future<String> addResource(String title, File file, int idForum) async {
+    final uri = Uri.parse("$BASE_URL/api/forum/$idForum/file");
     final token = await getToken();
 
     final request = http.MultipartRequest('POST', uri);
 
 
-    // Add file t o parasm
+    // Add file t oparasm
     request.files.add(
       await http.MultipartFile.fromPath(
         'file', file.path
