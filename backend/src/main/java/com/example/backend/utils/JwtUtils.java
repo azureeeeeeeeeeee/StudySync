@@ -20,7 +20,7 @@ public class JwtUtils {
             return Jwts
                     .builder()
                     .subject(customUser.getId() + ":" + customUser.getIsAdmin())
-                    .expiration(new Date(System.currentTimeMillis() + 300000))
+                    .expiration(new Date(System.currentTimeMillis() + 86400000))
                     .signWith(getSigningKey())
                     .compact();
         }
