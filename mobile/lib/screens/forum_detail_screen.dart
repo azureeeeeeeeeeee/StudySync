@@ -164,7 +164,17 @@ class _ForumDetailState extends State<ForumDetail> {
                 itemCount: forum!.files.length,
                 itemBuilder: (context, index) {
                   final file = forum!.files[index];
-                  return pdfCard(file: file, context: context);
+                  return pdfCard(
+                    file: file, 
+                    context: context, 
+                    forum: forum!,
+                    onDeleted: () async {
+                      final updatedForum = await Forum.getForumById(widget.forumId);
+                      setState(() {
+                        forum = updatedForum;
+                      });
+                    }
+                  );
                 }, 
                 separatorBuilder: (context, index) => SizedBox(height: 15),
                 scrollDirection: Axis.vertical, 

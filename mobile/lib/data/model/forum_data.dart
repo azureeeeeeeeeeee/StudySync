@@ -171,4 +171,65 @@ class Forum {
 
     return resData['message'] ?? "File berhasil ditambahkan";
   }
+
+
+  // Delete Resource
+  static Future<String> deleteResource(int idForum, int idFile) async {
+    final uri = Uri.parse("$BASE_URL/api/forum/$idForum/file/${idFile}");
+    final token = await getToken();
+
+    final response = await http.delete(
+      uri,
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"}
+    );
+
+    if (response.statusCode != 200) {
+      String errorMessage = 'Terjadi Kesalahan';
+
+      try {
+        final resError = jsonDecode(response.body);
+        errorMessage = resError['message'] ?? errorMessage;
+      } catch (e) {
+        errorMessage = 'Error: ${response.reasonPhrase}';
+      }
+
+      throw Exception(errorMessage);
+    }
+
+    final resData = jsonDecode(response.body);
+
+    return resData['message'] ?? "Berhasil menghapus file";
+  }
+
+
+
+  static Future<String> askAI(String question, String source) async {
+    final uri = Uri.parse("$AI_URL/api/query");
+
+    final response = await http.post(
+      uri,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "question": question,
+        "source": source,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      String errorMessage = 'Terjadi kesalahan';
+
+      try {
+        final resError = jsonDecode(response.body);
+        errorMessage = resError['message'] ?? errorMessage;
+      } catch (e) {
+        errorMessage = 'Error: ${response.reasonPhrase}';
+      }
+
+      throw Exception(errorMessage);
+    }
+
+    final resData = jsonDecode(response.body);
+
+    return resData['answer'] ?? "No answer returned.";
+  }
 }

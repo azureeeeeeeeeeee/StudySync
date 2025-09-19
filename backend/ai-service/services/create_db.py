@@ -2,7 +2,7 @@ from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain.schema import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from .utils import embeddings
+from services.utils import embeddings
 import shutil
 import os
 
@@ -49,9 +49,11 @@ def calculate_chunk_ids(chunks):
     return chunks
 
 def save_to_chroma(chunks: list[Document]):
-    db = Chroma.from_documents(
-        chunks, embedding=embeddings, persist_directory=CHROMA_PATH
-    )
+    # db = Chroma.from_documents(
+    #     chunks, embedding=embeddings, persist_directory=CHROMA_PATH
+    # )
+
+    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embeddings)
 
     chunks_with_ids = calculate_chunk_ids(chunks)
     existing_items = db.get(include=[])
