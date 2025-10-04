@@ -1,5 +1,5 @@
-const String LAN_IP = "172.31.192.1";
-const String IPV4_IP = "192.168.1.33";
+const String LAN_IP = "10.160.67.25";
+const String IPV4_IP = "10.128.120.116";
 const String AI_IP = "10.0.2.2";
 
 const String BASE_URL = "http://$LAN_IP:8080";
