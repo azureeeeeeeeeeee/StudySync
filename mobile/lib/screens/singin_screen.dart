@@ -65,11 +65,11 @@ class _LoginPageState extends State<LoginPage> {
               width: 300,
             ),
             const Center(child: Text(
-              'LOGIN',
+              'Login to your account',
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                // fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                fontSize: 24
+                fontSize: 20
               ),
             )),
             Padding(
