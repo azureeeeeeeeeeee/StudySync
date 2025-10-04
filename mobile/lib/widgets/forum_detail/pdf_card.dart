@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/data/model/forum_file_data.dart';
 import 'package:mobile/screens/pdf_viewer_screen.dart';
@@ -11,11 +12,12 @@ InkWell pdfCard({
 }) {
   return InkWell(
     onTap: () {
-      print("Going to ${file.url}");
-      Navigator.push(
-        context, 
-        MaterialPageRoute(builder: (context) => PdfViewerScreen(file: file))
-      );
+      debugPrint("Going to ${file.url}");
+      // Navigator.push(
+      //   context, 
+      //   MaterialPageRoute(builder: (context) => PdfViewerScreen(file: file))
+      // );
+      context.go('/read/pdf', extra: file);
     },
     child: Container(
       padding: EdgeInsets.all(8),

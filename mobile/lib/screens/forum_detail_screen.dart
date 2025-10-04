@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/data/model/forum_data.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile/widgets/forum_detail/pdf_card.dart';
 
 class ForumDetail extends StatefulWidget {
@@ -58,7 +59,7 @@ class _ForumDetailState extends State<ForumDetail> {
                 selectedFile!,
                 widget.forumId,
               );
-              Navigator.pop(context);
+              context.pop();
               final updatedForum = await Forum.getForumById(widget.forumId);
               setState(() {
                 forum = updatedForum;
@@ -66,8 +67,8 @@ class _ForumDetailState extends State<ForumDetail> {
               });
               forum = await Forum.getForumById(widget.forumId);
             } catch (e) {
-              print('==== ERROR ====');
-              print('Error : $e');
+              debugPrint('==== ERROR ====');
+              debugPrint('Error : $e');
             }
           }
 
@@ -182,7 +183,6 @@ class _ForumDetailState extends State<ForumDetail> {
             )
           ],
         ),
-        
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddFileDialog,

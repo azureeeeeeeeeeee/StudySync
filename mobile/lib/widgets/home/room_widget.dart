@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/screens/forum_detail_screen.dart';
 
@@ -21,11 +22,7 @@ InkWell forumCard({
 
   return InkWell(
     onTap: () {
-      print('Tapping forum with id of ${forum.id} & title of ${forum.title}');
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ForumDetail(forumId: forum.id)) 
-      );
+      context.go("/forum/${forum.id}");
     },
 
     child: Container(

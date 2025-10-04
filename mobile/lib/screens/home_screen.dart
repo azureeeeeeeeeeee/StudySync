@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/data/notifiers.dart';
 import 'package:mobile/widgets/home/room_widget.dart';
@@ -48,7 +49,7 @@ class HomePageState extends State<HomePage> {
       try {
         await Forum.addForum(data);
         await fetchForums();
-        Navigator.pop(context);
+        context.pop();
       } catch (e) {
         print('==== ERROR ====');
         print('Error : $e');
@@ -75,7 +76,7 @@ class HomePageState extends State<HomePage> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => context.pop(),
               child: Text('Batal'),
             ),
             ElevatedButton(

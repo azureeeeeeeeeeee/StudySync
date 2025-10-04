@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile/screens/home_screen.dart';
 import 'package:mobile/screens/signup_screen.dart';
 import 'package:mobile/data/notifiers.dart';
@@ -38,12 +39,8 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = false;
         errorMessage = null;
       });
-      print('Login successful: $data');
       usernameNotifier.value = _usernameController.text;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
+      context.go('/');
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -87,12 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignupPage(),
-                      ),
-                    );
+                    context.go('/register');
                   },
                   child: const Text('Don\'t have an account? Sign Up'),
                 ),

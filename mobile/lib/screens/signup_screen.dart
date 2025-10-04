@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/constants.dart';
 import 'package:mobile/screens/singin_screen.dart';
@@ -46,10 +47,7 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         isLoading = false;
       });
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
+      context.go('/login');
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -101,12 +99,7 @@ class _SignupPageState extends State<SignupPage> {
                 SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    );
+                    context.go('/login');
                   },
                   child: Text('Already have an account? Login'),
                 ),
