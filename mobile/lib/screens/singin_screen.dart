@@ -52,46 +52,52 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: Colors.tealAccent,
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Center(child: Text('Login to your account')),
-          if (errorMessage != null) ...[
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 50),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/logo/logo.png',
+              height: 300,
+              width: 300,
+            ),
+            const Center(child: Text(
+              'LOGIN',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic,
+                fontSize: 24
+              ),
+            )),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(errorMessage!, style: TextStyle(color: Colors.red)),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                children: [
+                  authInput(controller: _usernameController, isPassword: false, labelText: 'Username', icon: Icon(Icons.person_2_outlined)),
+                  const SizedBox(height: 10),
+                  authInput(controller: _passwordController, isPassword: true, labelText: 'Password', icon: Icon(Icons.vpn_key_outlined)),
+                  const SizedBox(height: 20),
+                  isLoading
+                      ? CircularProgressIndicator()
+                      : ElevatedButton(
+                        onPressed: _login,
+                        child: const Text('Login'),
+                      ),
+                  const SizedBox(height: 25),
+                  TextButton(
+                    onPressed: () {
+                      context.go('/register');
+                    },
+                    child: const Text('Don\'t have an account? Sign Up'),
+                  ),
+                ],
+              ),
             ),
           ],
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              children: [
-                authInput(controller: _usernameController, isPassword: false, labelText: 'Username'),
-                const SizedBox(height: 10),
-                authInput(controller: _passwordController, isPassword: true, labelText: 'Password'),
-                const SizedBox(height: 20),
-                isLoading
-                    ? CircularProgressIndicator()
-                    : ElevatedButton(
-                      onPressed: _login,
-                      child: const Text('Login'),
-                    ),
-                const SizedBox(height: 10),
-                TextButton(
-                  onPressed: () {
-                    context.go('/register');
-                  },
-                  child: const Text('Don\'t have an account? Sign Up'),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

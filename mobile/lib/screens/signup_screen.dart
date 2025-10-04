@@ -83,11 +83,11 @@ class _SignupPageState extends State<SignupPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                authInput(controller: _emailController, isPassword: false, labelText: "Username"),
+                authInput(controller: _emailController, isPassword: false, labelText: "Username", icon: Icon(Icons.person_2_outlined)),
                 SizedBox(height: 10),
-                authInput(controller: _passwordController, isPassword: true, labelText: "Password"),
+                authInput(controller: _passwordController, isPassword: true, labelText: "Password", icon: Icon(Icons.key)),
                 SizedBox(height: 10),
-                authInput(controller: _confirmPasswordController, isPassword: true, labelText: "Confirm Password"),
+                authInput(controller: _confirmPasswordController, isPassword: true, labelText: "Confirm Password", icon: Icon(Icons.vpn_key_outlined)),
                 SizedBox(height: 20),
 
                 isLoading

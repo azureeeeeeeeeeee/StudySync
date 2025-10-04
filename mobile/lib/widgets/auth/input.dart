@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 TextField authInput({
   required TextEditingController controller,
   required bool isPassword,
-  required String labelText 
+  required String labelText ,
+  required Icon icon
 }) {
   return TextField(
     controller: controller,
@@ -11,6 +12,9 @@ TextField authInput({
     decoration: InputDecoration(
       labelText: labelText,
       border: OutlineInputBorder(),
+      prefixIcon: Container(
+        child: icon
+      ),
     ),
   );
 }
