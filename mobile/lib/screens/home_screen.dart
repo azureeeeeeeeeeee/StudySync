@@ -66,11 +66,16 @@ class HomePageState extends State<HomePage> {
             children: [
               TextField(
                 controller: titleController,
-                decoration: InputDecoration(labelText: 'Judul'),
+                decoration: InputDecoration(
+                  labelText: 'Judul',
+                ),
               ),
               TextField(
                 controller: descriptionController,
-                decoration: InputDecoration(labelText: 'Deskripsi'),
+                decoration: InputDecoration(
+                  labelText: 'Deskripsi',
+                ),
+                maxLines: null,
               ),
             ],
           ),
