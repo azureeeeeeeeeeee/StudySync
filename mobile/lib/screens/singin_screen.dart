@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobile/screens/home_screen.dart';
-import 'package:mobile/screens/signup_screen.dart';
 import 'package:mobile/data/notifiers.dart';
 import 'package:mobile/services/auth.dart';
 import 'package:mobile/widgets/auth/input.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -40,12 +41,23 @@ class _LoginPageState extends State<LoginPage> {
         errorMessage = null;
       });
       usernameNotifier.value = _usernameController.text;
+
+      MotionToast.success(
+        description: const Text("Login Successful"),
+        toastAlignment: Alignment.topLeft,
+        toastDuration: Duration(seconds: 5),
+      ).show(context);
+      
       context.go('/');
     } catch (e) {
       setState(() {
         isLoading = false;
-        errorMessage = 'Login failed. Please check your credentials.';
       });
+      MotionToast.error(
+        description: const Text("Login failed. Please check your credentials"),
+        toastAlignment: Alignment.topLeft,
+        toastDuration: Duration(seconds: 5),
+      ).show(context);
     }
   }
 

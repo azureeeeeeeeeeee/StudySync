@@ -92,18 +92,22 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Selamat datang, @${usernameNotifier.value}'),
-        automaticallyImplyLeading: false,
-      ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              'Selamat datang, @${usernameNotifier.value}',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 28
+              ),
+            ),
+            SizedBox(height: 10,),
+            Text(
               'Berikut ini adalah kelompok belajar yang tersedia',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 8),
             Expanded(

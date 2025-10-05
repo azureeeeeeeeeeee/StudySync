@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile/services/auth.dart';
 import 'package:mobile/widgets/auth/input.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -31,9 +32,13 @@ class _SignupPageState extends State<SignupPage> {
 
     if (_passwordController.text != _confirmPasswordController.text) {
       setState(() {
-        errorMessage = 'Passwords do not match';
         isLoading = false;
       });
+      MotionToast.error(
+        description: const Text('Passwords do not match'),
+        toastAlignment: Alignment.topLeft,
+        toastDuration: Duration(seconds: 5),
+      ).show(context);
       return;
     }
 
@@ -42,12 +47,22 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         isLoading = false;
       });
+      MotionToast.success(
+        description: const Text("Signup successful"),
+        toastAlignment: Alignment.topLeft,
+        toastDuration: Duration(seconds: 5),
+      ).show(context);
       context.go('/login');
     } catch (e) {
       setState(() {
         isLoading = false;
         errorMessage = 'Signup failed. Please try again.';
       });
+      MotionToast.error(
+        description: const Text('Signup failed. Please try again.'),
+        toastAlignment: Alignment.topLeft,
+        toastDuration: Duration(seconds: 5),
+      ).show(context);
     }
   }
 
