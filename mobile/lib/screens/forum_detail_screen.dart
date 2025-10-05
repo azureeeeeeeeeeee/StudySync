@@ -127,7 +127,10 @@ class _ForumDetailState extends State<ForumDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Fetched ${widget.forumId}"),
+        leading: GestureDetector(
+          child: Icon(Icons.keyboard_backspace),
+          onTap: () => context.go('/'),
+        ),     
       ),
 
       body: forum == null ? 
