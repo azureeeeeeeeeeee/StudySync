@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile/constants.dart';
 import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/data/model/forum_file_data.dart';
@@ -88,6 +89,10 @@ class PdfViewerScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(file.title),
+        leading: GestureDetector(
+          child: Icon(Icons.arrow_back_outlined),
+          onTap: () => context.pop(),
+        ),
       ),
       body: SfPdfViewer.network(file.url),
       floatingActionButton: FloatingActionButton(

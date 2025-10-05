@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/data/model/forum_data.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile/data/notifiers.dart';
 import 'package:mobile/widgets/forum_detail/pdf_card.dart';
 
 class ForumDetail extends StatefulWidget {
@@ -129,7 +130,7 @@ class _ForumDetailState extends State<ForumDetail> {
       appBar: AppBar(
         leading: GestureDetector(
           child: Icon(Icons.keyboard_backspace),
-          onTap: () => context.go('/'),
+          onTap: () => context.pop(),
         ),     
       ),
 
@@ -187,11 +188,23 @@ class _ForumDetailState extends State<ForumDetail> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      // floatingActionButton: forum == null
+      //   ? null
+      //   : (usernameNotifier.value == forum!.owner ? 
+      //     FloatingActionButton(
+      //         onPressed: _showAddFileDialog,
+      //         tooltip: 'Tambah Kelompok Belajar',
+      //         child: const Icon(Icons.add),
+      //       )
+      //     : null),
+      floatingActionButton: (forum != null  &&
+        usernameNotifier.value == forum!.owner)
+    ? FloatingActionButton(
         onPressed: _showAddFileDialog,
         tooltip: 'Tambah Kelompok Belajar',
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       )
+    : null,
     );
   }
 }

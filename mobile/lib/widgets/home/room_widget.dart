@@ -99,7 +99,7 @@ InkWell forumCard({
 
   return InkWell(
     onTap: () {
-      context.go("/forum/${forum.id}");
+      context.push("/forum/${forum.id}");
     },
     child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/data/model/forum_file_data.dart';
+import 'package:mobile/data/notifiers.dart';
 import 'package:mobile/screens/pdf_viewer_screen.dart';
 
 InkWell pdfCard({
@@ -17,7 +18,7 @@ InkWell pdfCard({
       //   context, 
       //   MaterialPageRoute(builder: (context) => PdfViewerScreen(file: file))
       // );
-      context.go('/read/pdf', extra: file);
+      context.push('/read/pdf', extra: file);
     },
     child: Container(
       padding: EdgeInsets.all(8),
@@ -44,6 +45,7 @@ InkWell pdfCard({
             ],
           ),
           Spacer(),
+          usernameNotifier.value == forum.owner ? 
           SizedBox(
             width: 25,
             height: 25,
@@ -58,7 +60,7 @@ InkWell pdfCard({
               }, 
               child: Text('X'),
             ),
-          )
+          ) : SizedBox()
         ],
       )
     ),
