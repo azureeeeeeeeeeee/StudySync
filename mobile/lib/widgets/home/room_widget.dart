@@ -72,6 +72,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile/data/db/database.dart';
 import 'package:mobile/data/model/forum_data.dart';
 
 Color getRandomColor() {
@@ -90,6 +91,7 @@ Color getRandomColor() {
 InkWell forumCard({
   required Forum forum,
   required BuildContext context,
+  required AppDatabase db,
 }) {
   String description = forum.description.length > 60
       ? forum.description.substring(0, 60) + " ..."
@@ -99,7 +101,7 @@ InkWell forumCard({
 
   return InkWell(
     onTap: () {
-      context.push("/forum/${forum.id}");
+      context.push("/forum/${forum.id}", extra: db);
     },
     child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),

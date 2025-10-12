@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/data/db/database.dart';
 import 'package:mobile/data/model/forum_data.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile/data/notifiers.dart';
@@ -9,7 +10,8 @@ import 'package:mobile/widgets/forum_detail/pdf_card.dart';
 
 class ForumDetail extends StatefulWidget {
   final int forumId;
-  const ForumDetail({super.key, required this.forumId});
+  final AppDatabase db;
+  const ForumDetail({super.key, required this.forumId, required this.db});
 
   @override
   State<ForumDetail> createState() => _ForumDetailState();
@@ -178,7 +180,8 @@ class _ForumDetailState extends State<ForumDetail> {
                       setState(() {
                         forum = updatedForum;
                       });
-                    }
+                    },
+                    db: widget.db
                   );
                 }, 
                 separatorBuilder: (context, index) => SizedBox(height: 15),

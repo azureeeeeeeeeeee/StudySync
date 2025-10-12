@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile/data/db/database.dart';
 import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/data/notifiers.dart';
+import 'package:mobile/services/conn.dart';
+import 'package:mobile/widgets/home/downloaded_widget.dart';
 import 'package:mobile/widgets/home/room_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,12 +18,18 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   List<Forum> forums = [];
+  final db = AppDatabase();
 
   @override
   void initState() {
     super.initState();
 
     fetchForums();
+
+    NetworkUtils.onInternetStatusChange.listen((isOnline) {
+      print("=== NETWORK STATUS ===");
+      print('Network status: $isOnline');
+    });
   }
 
   Future<void> fetchForums() async {
@@ -120,12 +129,13 @@ class HomePageState extends State<HomePage> {
                 itemCount: forums.length,
                 itemBuilder: (context, index) {
                   final forum = forums[index];
-                  return forumCard(forum: forum, context: context);
+                  return forumCard(forum: forum, context: context, db: db);
                 },                
                 separatorBuilder: (context, index) => SizedBox(height: 15,),
                 scrollDirection: Axis.vertical,
               ),
             ),
+            DownloadedWidget(db: db),
           ],
         ),
       ),

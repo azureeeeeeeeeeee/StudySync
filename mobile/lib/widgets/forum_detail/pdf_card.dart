@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile/data/db/database.dart';
 import 'package:mobile/data/model/forum_data.dart';
 import 'package:mobile/data/model/forum_file_data.dart';
 import 'package:mobile/data/notifiers.dart';
 import 'package:mobile/screens/pdf_viewer_screen.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 InkWell pdfCard({
   required ForumFile file,
   required Forum forum,
   required BuildContext context,
-  required VoidCallback onDeleted  
+  required VoidCallback onDeleted,
+  required AppDatabase db
 }) {
   return InkWell(
     onTap: () {
@@ -45,6 +48,27 @@ InkWell pdfCard({
             ],
           ),
           Spacer(),
+          IconButton(
+            icon: const Icon(Icons.download, color: Colors.blue),
+            tooltip: 'Download This File',
+            onPressed: () async {
+              try {
+                final filePath = await Forum.downloadFile(file.url, file.title, db);
+                MotionToast.success(
+                  description: const Text("Downloading "),
+                  toastAlignment: Alignment.topLeft,
+                  toastDuration: Duration(seconds: 5),
+                ).show(context);
+              } catch (e) {
+                MotionToast.error(
+                  description: Text('Download failed: $e'),
+                  toastAlignment: Alignment.topLeft,
+                  toastDuration: Duration(seconds: 5),
+                  ).show(context);
+              }
+            },
+          ),
+
           usernameNotifier.value == forum.owner ? 
           SizedBox(
             width: 25,
