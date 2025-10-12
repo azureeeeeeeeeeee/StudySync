@@ -6,8 +6,8 @@ from services.utils import embeddings
 import shutil
 import os
 
-DATA_PATH = "../../uploads"
-CHROMA_PATH = '../chroma'
+DATA_PATH = "../uploads"
+CHROMA_PATH = './chroma'
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -18,8 +18,8 @@ def load_documents():
 
 def split_documents(documents: list[Document]):
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=800,
-        chunk_overlap=80,
+        chunk_size=1000,
+        chunk_overlap=100,
         length_function=len,
         is_separator_regex=False
     )
@@ -49,10 +49,6 @@ def calculate_chunk_ids(chunks):
     return chunks
 
 def save_to_chroma(chunks: list[Document]):
-    # db = Chroma.from_documents(
-    #     chunks, embedding=embeddings, persist_directory=CHROMA_PATH
-    # )
-
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embeddings)
 
     chunks_with_ids = calculate_chunk_ids(chunks)

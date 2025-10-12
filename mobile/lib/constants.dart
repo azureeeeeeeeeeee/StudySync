@@ -1,4 +1,4 @@
-const String LAN_IP = "192.168.11.160";
+const String LAN_IP = "10.160.86.31";
 const String IPV4_IP = "10.128.120.116";
 const String AI_IP = "10.0.2.2";
 
