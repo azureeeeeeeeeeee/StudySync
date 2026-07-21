@@ -13,7 +13,7 @@ async def ask_question(payload: QuestionRequest):
     question = payload.question
     source = payload.source
 
-    answer = query.query(question, source, score=0, model="tiiuae/falcon-7b-instruct")
+    answer = query.query(question, source, score=0, total_chunks=10)
 
     return {
         "answer": answer

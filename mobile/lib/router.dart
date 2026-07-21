@@ -9,7 +9,7 @@ import 'package:mobile/screens/signup_screen.dart';
 import 'package:mobile/screens/singin_screen.dart';
 
 final GoRouter routes = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',

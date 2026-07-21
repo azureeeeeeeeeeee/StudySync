@@ -20,7 +20,7 @@ class PdfViewerScreen extends StatelessWidget {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            Future<void> _askQuestion() async {
+            Future<void> askQuestion() async {
               final question = questionController.text.trim();
               if (question.isEmpty) return;
 
@@ -48,24 +48,27 @@ class PdfViewerScreen extends StatelessWidget {
 
             return AlertDialog(
               title: Text("Ask AI - ${file.title}"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: questionController,
-                    decoration: const InputDecoration(
-                      labelText: "Your question",
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      controller: questionController,
+                      decoration: const InputDecoration(
+                        labelText: "Your question",
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  if (isLoading)
-                    const CircularProgressIndicator()
-                  else if (answer != null)
-                    Text(
-                      "Answer: $answer",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                ],
+                    const SizedBox(height: 12),
+                    if (isLoading)
+                      const Center(child: CircularProgressIndicator())
+                    else if (answer != null)
+                      Text(
+                        "Answer: $answer",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                  ],
+                ),
               ),
               actions: [
                 TextButton(
@@ -73,7 +76,7 @@ class PdfViewerScreen extends StatelessWidget {
                   child: const Text("Close"),
                 ),
                 ElevatedButton(
-                  onPressed: _askQuestion,
+                  onPressed: askQuestion,
                   child: const Text("Ask"),
                 ),
               ],

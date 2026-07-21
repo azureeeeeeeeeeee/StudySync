@@ -14,8 +14,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => HomePageState();
 }
 
-
-
 class HomePageState extends State<HomePage> {
   List<Forum> forums = [];
   final db = AppDatabase();
@@ -23,20 +21,18 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
     fetchForums();
 
     NetworkUtils.onInternetStatusChange.listen((isOnline) {
       print("=== NETWORK STATUS ===");
       print('Network status: $isOnline');
+      connectivityStatusNotifier.value = isOnline;
     });
   }
 
   Future<void> fetchForums() async {
     try {
       final allForums = await Forum.getAllforum();
-      print("==== Forums ====");
-      print(forums);
       setState(() {
         forums = allForums;
       });
@@ -45,10 +41,10 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-
   void _showAddRoomDialog() {
     final titleController = TextEditingController();
     final descriptionController = TextEditingController();
+
     Future<void> _addForum() async {
       Map<String, String> data = {
         'title': titleController.text,
@@ -60,7 +56,6 @@ class HomePageState extends State<HomePage> {
         await fetchForums();
         context.pop();
       } catch (e) {
-        print('==== ERROR ====');
         print('Error : $e');
       }
     }
@@ -69,21 +64,17 @@ class HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Tambah Kelompok Belajar'),
+          title: const Text('Tambah Kelompok Belajar'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: titleController,
-                decoration: InputDecoration(
-                  labelText: 'Judul',
-                ),
+                decoration: const InputDecoration(labelText: 'Judul'),
               ),
               TextField(
                 controller: descriptionController,
-                decoration: InputDecoration(
-                  labelText: 'Deskripsi',
-                ),
+                decoration: const InputDecoration(labelText: 'Deskripsi'),
                 maxLines: null,
               ),
             ],
@@ -91,11 +82,11 @@ class HomePageState extends State<HomePage> {
           actions: [
             TextButton(
               onPressed: () => context.pop(),
-              child: Text('Batal'),
+              child: const Text('Batal'),
             ),
             ElevatedButton(
               onPressed: _addForum,
-              child: Text('Tambah'),
+              child: const Text('Tambah'),
             ),
           ],
         );
@@ -106,43 +97,130 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Selamat datang, @${usernameNotifier.value}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 28
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60),
+        child: ValueListenableBuilder<bool>(
+          valueListenable: isAuthenticatedNotifier,
+          builder: (context, isAuthenticated, _) {
+            return AppBar(
+              backgroundColor: Colors.blueAccent,
+              title: ValueListenableBuilder<String>(
+                valueListenable: usernameNotifier,
+                builder: (context, username, _) => Text(
+                  isAuthenticated
+                      ? 'Welcome, @$username'
+                      : 'Welcome, Guest',
+                ),
               ),
-            ),
-            SizedBox(height: 10,),
-            Text(
-              'Berikut ini adalah kelompok belajar yang tersedia',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: ListView.separated(
-                itemCount: forums.length,
-                itemBuilder: (context, index) {
-                  final forum = forums[index];
-                  return forumCard(forum: forum, context: context, db: db);
-                },                
-                separatorBuilder: (context, index) => SizedBox(height: 15,),
-                scrollDirection: Axis.vertical,
-              ),
-            ),
-            DownloadedWidget(db: db),
-          ],
+              actions: [
+                if (!isAuthenticated)
+                  TextButton.icon(
+                    onPressed: () => context.go('/login'),
+                    icon: const Icon(Icons.login, color: Colors.white),
+                    label: const Text(
+                      'Login',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                else
+                  TextButton.icon(
+                    onPressed: () {
+                      // simple logout action
+                      isAuthenticatedNotifier.value = false;
+                      usernameNotifier.value = "Anonymous User";
+                      context.go('/login');
+                    },
+                    icon: const Icon(Icons.logout, color: Colors.white),
+                    label: const Text(
+                      'Logout',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+              ],
+            );
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddRoomDialog,
-        tooltip: 'Tambah Kelompok Belajar',
-        child: Icon(Icons.add),
+
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+        child: ValueListenableBuilder<bool>(
+          valueListenable: connectivityStatusNotifier,
+          builder: (context, isOnline, _) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!isOnline)
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8),
+                    color: Colors.redAccent,
+                    child: const Row(
+                      children: [
+                        Icon(Icons.wifi_off, color: Colors.white),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Anda tidak terhubung ke internet',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Berikut ini adalah kelompok belajar yang tersedia',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: forums.length,
+                    itemBuilder: (context, index) {
+                      final forum = forums[index];
+                      return AbsorbPointer(
+                        absorbing: !isOnline,
+                        child: Opacity(
+                          opacity: isOnline ? 1 : 0.5,
+                          child: forumCard(
+                            forum: forum,
+                            context: context,
+                            db: db,
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 15),
+                  ),
+                ),
+                DownloadedWidget(db: db),
+              ],
+            );
+          },
+        ),
+      ),
+
+      floatingActionButton: ValueListenableBuilder<bool>(
+        valueListenable: connectivityStatusNotifier,
+        builder: (context, isOnline, _) {
+          return ValueListenableBuilder<bool>(
+            valueListenable: isAuthenticatedNotifier,
+            builder: (context, isAuthenticated, _) {
+              
+              if (!isOnline || !isAuthenticated) {
+                return const SizedBox.shrink();
+              }
+
+              return FloatingActionButton(
+                onPressed: _showAddRoomDialog,
+                tooltip: 'Tambah Kelompok Belajar',
+                child: const Icon(Icons.add),
+              );
+            },
+          );
+        },
       ),
     );
   }
